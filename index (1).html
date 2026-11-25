@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Did you get me a gift?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@500;700&display=swap">
+<style>
+:root{
+  --sky-a:#e6f3ff; --sky-b:#bcd9f2; --sky-c:#8fb6de;
+  --paper:#ffffff; --ink:#1d3557; --soft:#52698a;
+  --accent:#c9302c; --accent-ink:#ffffff; --gold:#f0b429; --green:#1f7a4d; --glow:rgba(240,180,41,.85);
+  --head:'Mountains of Christmas','Georgia',serif;
+  --body:'Nunito','Segoe UI',system-ui,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --sky-a:#16284f; --sky-b:#0e1a38; --sky-c:#080e22;
+    --paper:#172447; --ink:#f4f7ff; --soft:#b8c6e6;
+    --accent:#ff6b6b; --accent-ink:#2a0d0d; --gold:#ffd166; --green:#4cc38a; --glow:rgba(255,209,102,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --sky-a:#16284f; --sky-b:#0e1a38; --sky-c:#080e22;
+  --paper:#172447; --ink:#f4f7ff; --soft:#b8c6e6;
+  --accent:#ff6b6b; --accent-ink:#2a0d0d; --gold:#ffd166; --green:#4cc38a; --glow:rgba(255,209,102,.8);
+  color-scheme:dark;
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);
+  background:linear-gradient(180deg,var(--sky-a),var(--sky-b) 60%,var(--sky-c)) no-repeat}
+body{height:100%;margin:0;background:inherit;color:var(--ink);font-family:var(--body);overflow:hidden}
+main{height:100%;box-sizing:border-box;display:grid;place-items:center;overflow-y:auto;
+  padding:clamp(120px,26vh,200px) 20px 24px;position:relative;z-index:1}
+main>*{grid-area:1/1}
+
+/* snow */
+.snow{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+.flake{position:absolute;top:-20px;border-radius:50%;background:#fff;opacity:.85;animation:fall linear infinite}
+@keyframes fall{to{transform:translate(var(--dx),110vh)}}
+
+/* parol (star lantern) */
+.parol{position:fixed;top:env(safe-area-inset-top,0px);left:50%;transform:translateX(-50%);z-index:0;
+  display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 0 18px var(--glow));pointer-events:none}
+.parol i{width:2px;height:clamp(24px,7vh,60px);background:var(--ink)}
+.parol b{display:block;width:clamp(84px,22vw,130px);aspect-ratio:1;background:var(--gold);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  animation:blink 2.4s steps(1) infinite}
+@keyframes blink{0%{background:var(--gold)}50%{background:var(--accent)}}
+
+/* gift box */
+/* greeting */
+.greet{text-align:center;animation:pop .8s ease backwards;transition:opacity .5s,visibility 0s .5s}
+.greet .big{font:700 clamp(3.2rem,15vw,7rem)/.95 var(--head);margin:0 0 30px;color:var(--accent);text-shadow:0 0 28px var(--glow)}
+.greet .opt{padding:12px 30px}
+.go .greet{opacity:0;visibility:hidden;pointer-events:none}
+
+.gift-wrap{text-align:center;opacity:0;visibility:hidden;pointer-events:none}
+.go .gift-wrap{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .5s .3s,visibility 0s}
+.gift{all:unset;cursor:pointer;display:block;position:relative;width:min(56vw,190px);aspect-ratio:1;margin:0 auto;
+  animation:wiggle 2.8s ease-in-out infinite}
+.gift:focus-visible{outline:3px solid var(--ink);outline-offset:8px}
+@keyframes wiggle{0%,70%,100%{transform:rotate(0)}76%{transform:rotate(-4deg)}82%{transform:rotate(4deg)}88%{transform:rotate(-3deg)}94%{transform:rotate(2deg)}}
+.box{position:absolute;left:8%;right:8%;bottom:0;height:58%;background:var(--accent);border:3px solid var(--ink);border-radius:6px}
+.lid{position:absolute;left:2%;right:2%;bottom:56%;height:22%;background:var(--accent);border:3px solid var(--ink);border-radius:6px;
+  transition:transform .7s cubic-bezier(.3,1.5,.5,1)}
+.box::before,.lid::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:18%;transform:translateX(-50%);background:var(--gold)}
+.bow{position:absolute;left:50%;bottom:100%;width:46%;height:70%;transform:translateX(-50%)}
+.bow::before,.bow::after{content:"";position:absolute;bottom:0;width:52%;height:100%;border:4px solid var(--ink);background:var(--gold);border-radius:50%}
+.bow::before{left:-4%;transform:rotate(-32deg);transform-origin:bottom right}
+.bow::after{right:-4%;transform:rotate(32deg);transform-origin:bottom left}
+.gift.open{animation:none}
+.gift.open .lid{transform:translateY(-120%) rotate(-16deg)}
+.hint{font:700 1.8rem var(--head);margin:22px 0 0}
+.ready .gift-wrap{opacity:0;visibility:hidden;pointer-events:none}
+
+/* card */
+#card{display:none;width:min(92vw,440px);box-sizing:border-box;background:var(--paper);color:var(--ink);
+  border:3px solid var(--green);border-radius:18px;padding:28px 24px 22px;text-align:center;
+  box-shadow:0 18px 50px rgba(8,14,34,.3)}
+.ready #card{display:block;animation:pop .6s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+#card h1,#card h2{font:700 clamp(2.1rem,8vw,2.8rem)/1.1 var(--head);margin:6px 0 18px;outline:none}
+#card p{margin:0;line-height:1.55}
+.lead{color:var(--soft)}
+.opts{display:grid;gap:10px;margin:0 0 18px}
+button.opt{font:700 1.05rem var(--body);min-height:48px;padding:12px 16px;border-radius:12px;
+  border:2px solid var(--accent);background:transparent;color:var(--ink);cursor:pointer;transition:transform .15s}
+button.opt:hover{transform:translateY(-2px)}
+button.opt:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+button.yes{background:var(--accent);color:var(--accent-ink)}
+.from{font:700 1.6rem var(--head);color:var(--green)}
+.count{font-size:.9rem;color:var(--soft);margin-top:4px!important}
+#reply .opt{margin-top:22px;width:100%}
+
+.star{position:fixed;left:50%;top:50%;font-size:var(--s);color:var(--gold);pointer-events:none;z-index:5;
+  animation:fly 1.8s ease-out forwards}
+@keyframes fly{from{transform:translate(-50%,-50%) scale(.4);opacity:1}
+  to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+</style>
+</head>
+<body>
+
+<div class="snow" id="snow" aria-hidden="true"></div>
+<div class="parol" aria-hidden="true"><i></i><b></b></div>
+
+<main>
+  <section class="greet" id="greet">
+    <h1 class="big">Merry<br>Christmas!</h1>
+    <button type="button" class="opt yes" id="go">Tap to continue</button>
+  </section>
+
+  <div class="gift-wrap">
+    <button class="gift" id="gift" type="button" aria-label="Open the gift">
+      <span class="box"></span>
+      <span class="lid"><span class="bow"></span></span>
+    </button>
+    <p class="hint" id="hint">Tap the gift</p>
+  </div>
+
+  <section id="card" aria-live="polite">
+    <div id="ask">
+      <p class="lead" id="lead"></p>
+      <h2 id="q" tabindex="-1">Did you get me a gift?</h2>
+      <div class="opts">
+        <button type="button" class="opt yes" data-a="yes">Yes, it’s already wrapped</button>
+        <button type="button" class="opt" data-a="maybe">Maybe… it’s a surprise</button>
+        <button type="button" class="opt" data-a="notyet">Not yet</button>
+      </div>
+      <p class="from" id="from"></p>
+      <p class="count" id="count"></p>
+    </div>
+    <div id="reply" hidden>
+      <h2 id="rt" tabindex="-1"></h2>
+      <p id="rp"></p>
+      <button type="button" class="opt" id="back">Ask again</button>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Change these, then republish. Leave TO empty to skip a name.
+  const TO = "";
+  const FROM = "Christian";
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (id) => document.getElementById(id);
+
+  $("lead").textContent = (TO ? "Hi " + TO + "! " : "") + "Merry Christmas. Quick question.";
+  $("from").textContent = "From " + FROM;
+
+  // days until Christmas
+  const now = new Date();
+  let xmas = new Date(now.getFullYear(), 11, 25);
+  const isToday = now.getMonth() === 11 && now.getDate() === 25;
+  if (!isToday && now > xmas) xmas = new Date(now.getFullYear() + 1, 11, 25);
+  const days = Math.ceil((xmas - now) / 864e5);
+  $("count").textContent = isToday ? "It’s Christmas today!" : days + (days === 1 ? " day" : " days") + " until Christmas";
+
+  const answers = {
+    yes: {
+      title: "Best. Christmas. Ever.",
+      text: "I knew I could count on you. Hand it over whenever you’re ready. I promise I won’t shake the box. Much.",
+      burst: true
+    },
+    maybe: {
+      title: "Maybe is a suspicious answer.",
+      text: "I’m choosing to hear a yes. I’ll act very surprised either way."
+    },
+    notyet: {
+      title: "Not yet? That’s okay!",
+      text: "Christmas isn’t here yet, so you still have time. Hugs and cookies count as gifts too."
+    }
+  };
+
+  // snow
+  if (!reduced) {
+    const snow = $("snow");
+    for (let i = 0; i < 40; i++) {
+      const f = document.createElement("span");
+      const s = 3 + Math.random() * 6;
+      f.className = "flake";
+      f.style.cssText = "left:" + (Math.random() * 100) + "%;width:" + s + "px;height:" + s +
+        "px;--dx:" + (Math.random() * 60 - 30) + "px;animation-duration:" + (8 + Math.random() * 10) +
+        "s;animation-delay:-" + (Math.random() * 18) + "s";
+      snow.appendChild(f);
+    }
+  }
+
+  // greeting first, then the gift
+  $("go").addEventListener("click", function () {
+    document.body.classList.add("go");
+    setTimeout(function () { $("gift").focus(); }, 450);
+  }, { once: true });
+
+  // open the gift, then show the question
+  $("gift").addEventListener("click", function () {
+    this.classList.add("open");
+    $("hint").style.visibility = "hidden";
+    setTimeout(function () {
+      document.body.classList.add("ready");
+      $("q").focus();
+    }, reduced ? 150 : 1100);
+  }, { once: true });
+
+  function burst() {
+    if (reduced) return;
+    for (let i = 0; i < 30; i++) {
+      const h = document.createElement("span");
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 120 + Math.random() * 220;
+      h.className = "star";
+      h.textContent = "★";
+      h.style.cssText = "--s:" + (16 + Math.random() * 22) + "px;--dx:" + Math.cos(angle) * dist +
+        "px;--dy:" + Math.sin(angle) * dist + "px";
+      document.body.appendChild(h);
+      setTimeout(function () { h.remove(); }, 1900);
+    }
+  }
+
+  document.querySelectorAll("[data-a]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      const a = answers[b.dataset.a];
+      $("rt").textContent = a.title;
+      $("rp").textContent = a.text;
+      $("ask").hidden = true;
+      $("reply").hidden = false;
+      $("rt").focus();
+      if (a.burst) burst();
+    });
+  });
+
+  $("back").addEventListener("click", function () {
+    $("reply").hidden = true;
+    $("ask").hidden = false;
+    $("q").focus();
+  });
+</script>
+</body>
+</html>
